@@ -76,15 +76,7 @@ get '/remove' => sub {
   $c->redirect_to('/');
 };
 
-if($ENV{APP_POOL_CONFIG}) {
-  use FCGI;
-  my $request = FCGI::Request();
-  while ( $request->Accept >= 0 ) {
-    app->start("cgi");
-  }
-} else {
- app->start();
-}
+app->start();
 
 __DATA__
 
