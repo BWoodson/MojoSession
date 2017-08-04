@@ -1,17 +1,24 @@
 #!/usr/bin/perl
 
 use Mojolicious::Lite;
+use Data::Dumper;
+
+# Set app mode to production is running on IIS
+if( $ENV{APP_POOL_ID} ) {
+  app->mode('production');
+}
 
 # Setup sessions
 app->secrets(['SessionTest']);
+app->sessions->cookie_domain('.example.com');
 app->sessions->cookie_name('sessiontest');
-app->sessions->default_expiration(157248000);
+# app->sessions->default_expiration(157248000);
 
 helper logw => sub {
   my $c = shift;
   my $text = shift;
 
-  unless($ENV{APP_POOL_CONFIG}) {
+  unless( app->mode eq 'production' ) {
     $c->app->log->info($text);
   }
 
